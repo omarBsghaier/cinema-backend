@@ -13,7 +13,7 @@ public class CinemaApplication implements CommandLineRunner {
 
 
     public static void main(String[] args){
-
+        System.out.println("aa");
         SpringApplication.run(CinemaApplication.class, args);
     }
 
