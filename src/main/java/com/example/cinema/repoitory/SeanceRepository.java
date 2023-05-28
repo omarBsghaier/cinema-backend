@@ -1,7 +1,6 @@
-package com.example.cinema.dao;
+package com.example.cinema.repoitory;
 
-import com.example.cinema.entities.Salle;
-import com.example.cinema.entities.Ticket;
+import com.example.cinema.entities.Seance;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -9,5 +8,5 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @RepositoryRestResource
 @CrossOrigin("*")
 
-public interface TicketRepository extends JpaRepository <Ticket,Long > {
+public interface SeanceRepository extends JpaRepository <Seance,Long > {
 }

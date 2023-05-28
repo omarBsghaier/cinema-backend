@@ -1,10 +1,11 @@
 package com.example.cinema.service;
 
-import com.example.cinema.dao.*;
+import com.example.cinema.repoitory.*;
 import com.example.cinema.entities.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -15,6 +16,7 @@ import java.util.Random;
 import java.util.stream.Stream;
 @Service
 @Transactional
+@CrossOrigin("*")
 public class CinemaInitServiceImpl implements  IcinemaInitService{
     @Autowired
     private VilleRepository villeRepository ;
@@ -37,7 +39,7 @@ public class CinemaInitServiceImpl implements  IcinemaInitService{
 
     @Override
     public void initVilles() {
-        Stream.of("Sousse" , "benzaret", "tunis", "EZ-zahra").forEach(nameVille->{
+        Stream.of("Beja" , "benzaret", "tunis", "EZ-zahra").forEach(nameVille->{
             Ville ville = new Ville() ;
             ville.setName(nameVille);
             villeRepository.save(ville) ;
@@ -119,12 +121,12 @@ public class CinemaInitServiceImpl implements  IcinemaInitService{
     public void initFilms() {
         double [] durees = new double[] { 1 ,1.5 , 2 ,2.5,3} ;
         List<Categorie> categories = categorieRepository.findAll() ;
-        Stream.of("12 Homes en colaire", "Forrset Gump" , "Green book" ,"la ligne verte","le seigneur des anneaux")
+        Stream.of("sabaklkhir", "Forrest Gump" , "dachra" ,"portFarina","fartatoAlDahab")
                 .forEach(titreFilm->{
                     Film film = new Film() ;
                     film.setTitre(titreFilm);
                     film.setDuree(durees[new Random().nextInt(durees.length)]);
-                    film.setPhoto(titreFilm.replace(" ",""));
+                    film.setPhoto(titreFilm.replace(" ","")+".jpg");
                     film.setCategorie(categories.get(new Random().nextInt(categories.size())));
                     filmRepository.save(film) ;
                 });
@@ -133,22 +135,22 @@ public class CinemaInitServiceImpl implements  IcinemaInitService{
 
     @Override
     public void initProjections() {
-        double [] prices =  new double[] { 30, 50 ,60 , 70 , 90 , 10 } ;
-        villeRepository.findAll().forEach(ville ->{
+        double[] prices = new double[]{3, 5, 6, 7, 4 ,5};
+        List<Film> films = filmRepository.findAll();
+        villeRepository.findAll().forEach(ville -> {
             ville.getCinemas().forEach(cinema -> {
                 cinema.getSalles().forEach(salle -> {
-                    filmRepository.findAll().forEach(film ->{
-                        seanceRepository.findAll().forEach(seance -> {
-                            Projection projection = new Projection() ;
-                            projection.setDateProjection(new Date());
-                            projection.setFilm(film);
-                            projection.setPrix(prices[new Random().nextInt(prices.length)]);
-                            projection.setSalle(salle);
-                            projection.setSeance(seance);
-                            projectionRepository.save(projection) ;
-                        });
+                    int index = new Random().nextInt(films.size());
+                    Film film = films.get(index);
+                    seanceRepository.findAll().forEach(seance -> {
+                        Projection projection = new Projection();
+                        projection.setDateProjection(new Date());
+                        projection.setFilm(film);
+                        projection.setPrix(prices[new Random().nextInt(prices.length)]);
+                        projection.setSalle(salle);
+                        projection.setSeance(seance);
+                        projectionRepository.save(projection);
                     });
-
                 });
             });
         });
